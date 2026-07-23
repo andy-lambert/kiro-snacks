@@ -1,0 +1,25 @@
+{
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "printf '{\"event\":\"stop\",\"ts\":\"%s\"}\\n' \"$(date -Iseconds)\" >> \"$HOME/.forge-bridge/status/events.jsonl\""
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "printf '{\"event\":\"bash\",\"ts\":\"%s\"}\\n' \"$(date -Iseconds)\" >> \"$HOME/.forge-bridge/status/tool-events.jsonl\""
+          }
+        ]
+      }
+    ]
+  }
+}

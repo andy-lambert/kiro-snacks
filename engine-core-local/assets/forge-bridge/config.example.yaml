@@ -1,0 +1,22 @@
+# ~/.forge-bridge/config.yaml — Engine Core Local project registry.
+#
+# Maps short project keys to absolute repo paths on THIS machine. A task file's
+# optional `project-dir:` frontmatter selects a key; the dispatcher resolves it
+# to a working directory before invoking the executor (so the executor's
+# governance auto-discovery, relative paths, and git ops resolve correctly).
+#
+# Copy to ~/.forge-bridge/config.yaml and edit paths for your machine.
+# A leading ~ is expanded to $HOME.
+
+version: "1.0"
+
+# Key used when a task file omits `project-dir:` frontmatter.
+default_project: my-app
+
+projects:
+  my-app:  ~/code/my-app
+  infra:   ~/code/my-app-infra
+  content: ~/code/my-app-content
+
+# Optional per-executor overrides (consumed via env vars by dispatchers).
+# claude_max_budget_usd: 1.00   # export FORGE_CLAUDE_MAX_BUDGET_USD to override

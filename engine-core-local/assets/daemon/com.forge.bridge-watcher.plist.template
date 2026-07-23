@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN"
+  "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  macOS launchd agent for the Engine Core Local watcher.
+
+  Install:
+    1. Replace __HOME__ with your home dir (e.g. /Users/you) and __PATH__ with
+       the output of `echo "$HOME/.local/bin:$(brew --prefix)/bin:/usr/local/bin:/usr/bin:/bin"`.
+    2. Save to ~/Library/LaunchAgents/com.forge.bridge-watcher.plist
+    3. launchctl load ~/Library/LaunchAgents/com.forge.bridge-watcher.plist
+    4. launchctl list | grep forge
+
+  RunAtLoad starts it on login; KeepAlive restarts it if it crashes. The
+  explicit PATH is required because launchd runs with a minimal environment.
+-->
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.forge.bridge-watcher</string>
+    <key>ProgramArguments</key>
+    <array>
+        <string>__HOME__/.forge-bridge/watcher.sh</string>
+    </array>
+    <key>RunAtLoad</key>
+    <true/>
+    <key>KeepAlive</key>
+    <true/>
+    <key>StandardOutPath</key>
+    <string>__HOME__/.forge-bridge/status/watcher-stdout.log</string>
+    <key>StandardErrorPath</key>
+    <string>__HOME__/.forge-bridge/status/watcher-stderr.log</string>
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>PATH</key>
+        <string>__PATH__</string>
+        <key>HOME</key>
+        <string>__HOME__</string>
+        <!-- For Kiro CLI headless auth in unattended runs, uncomment and set:
+        <key>KIRO_API_KEY</key>
+        <string>your-kiro-api-key</string>
+        -->
+    </dict>
+</dict>
+</plist>
