@@ -1,0 +1,36 @@
+# .forge/manifest.yaml — parallel-execution coordination contract.
+#
+# Lives at the ROOT of each participating repo. Write-only for the orchestrator,
+# read-only for executors. Declares who is working where, on which branch, and
+# which files each task claims — so no two parallel tasks touch the same paths.
+#
+# See steering/parallel-execution-safety.md and steering/reconciliation.md.
+
+version: "1.0"
+last_updated: "2026-01-01T00:00:00Z"
+updated_by: "orchestrator"
+
+active_tasks:
+  - id: "implement-build-adapter"
+    branch: "task/build-adapter"
+    agent: "claude-code-cli"
+    claims:
+      - "adapters/build/"
+      - "package.json"
+    status: "dispatched"          # queued | dispatched | running | completed | failed
+    dispatched_at: "2026-01-01T00:05:00Z"
+
+  - id: "implement-test-adapter"
+    branch: "task/test-adapter"
+    agent: "claude-code-cli"
+    claims:
+      - "adapters/test/"
+    status: "dispatched"
+    dispatched_at: "2026-01-01T00:05:30Z"
+
+# Branches awaiting reconciliation, in dependency (merge) order.
+pending_reconciliation: []
+#  - branch: "task/build-adapter"
+#    merge_order: 1
+#  - branch: "task/test-adapter"
+#    merge_order: 2

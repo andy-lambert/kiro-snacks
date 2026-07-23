@@ -1,0 +1,30 @@
+# Linux systemd *user* unit for the Engine Core Local watcher.
+#
+# Install:
+#   1. Save to ~/.config/systemd/user/forge-bridge-watcher.service
+#   2. systemctl --user daemon-reload
+#   3. systemctl --user enable --now forge-bridge-watcher
+#   4. systemctl --user status forge-bridge-watcher
+#   5. (optional, survive logout) sudo loginctl enable-linger "$USER"
+#
+# Requires fswatch or inotify-tools (inotifywait) installed.
+# %h expands to the user's home directory.
+
+[Unit]
+Description=Engine Core Local — forge-bridge queue watcher
+After=default.target
+
+[Service]
+Type=simple
+ExecStart=%h/.forge-bridge/watcher.sh
+Restart=always
+RestartSec=3
+# Ensure user-local and common tool paths are visible to the daemon:
+Environment=PATH=%h/.local/bin:/usr/local/bin:/usr/bin:/bin
+# For Kiro CLI headless auth in unattended runs, uncomment and set:
+# Environment=KIRO_API_KEY=your-kiro-api-key
+StandardOutput=append:%h/.forge-bridge/status/watcher-stdout.log
+StandardError=append:%h/.forge-bridge/status/watcher-stderr.log
+
+[Install]
+WantedBy=default.target
